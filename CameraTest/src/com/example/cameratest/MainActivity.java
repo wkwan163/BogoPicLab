@@ -67,12 +67,32 @@ public class MainActivity extends Activity {
 
 		// TODO: Put in the intent in the tag MediaStore.EXTRA_OUTPUT the URI
 		
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+		
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+		
 		// TODO: Start the activity (expecting a result), with the code
 		// CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
 		
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				TextView tv = (TextView) findViewById(R.id.status);
+				tv.setText("Photo OK");
+				ImageButton ib = (ImageButton) findViewById(R.id.TakeAPhoto);
+				Drawable picture = Drawable.createFromPath(imageFileUri.getPath());
+				ib.setImageDrawable(picture);
+			} else if (resultCode == RESULT_CANCELED) {
+				TextView tv = (TextView) findViewById(R.id.status);
+				tv.setText("Photo Cancelled");
+			} else {
+				TextView tv = (TextView) findViewById(R.id.status);
+				tv.setText("Photo...idk?");
+				}
+		}
 		// TODO: Handle the results from CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
 		
 		// TODO: Handle the cases for RESULT_OK, RESULT_CANCELLED, and others
